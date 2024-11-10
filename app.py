@@ -1,11 +1,11 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template
 import pandas as pd
 import re
 
 app = Flask(__name__)
 
 # Load the CSV file
-data = pd.read_csv('/content/my 3mtt september hate speeh detection.csv')
+data = pd.read_csv('my 3mtt september hate speeh detection.csv')
 
 # Function to clean and tokenize text
 def tokenize(text):
@@ -62,23 +62,7 @@ def index():
         user_comment = request.form.get("comment")
         classification = classify_comment(user_comment, data)
     
-    return render_template_string("""
-        <html>
-            <head>
-                <title>Comment Classification</title>
-            </head>
-            <body>
-                <h1>Enter a comment to classify</h1>
-                <form method="POST">
-                    <textarea name="comment" rows="4" cols="50"></textarea><br><br>
-                    <input type="submit" value="Classify">
-                </form>
-                {% if classification %}
-                    <h2>Classification: {{ classification }}</h2>
-                {% endif %}
-            </body>
-        </html>
-    """, classification=classification)
+    return render_template("index.html", classification=classification)
 
 if __name__ == "__main__":
     app.run(debug=True)
