@@ -1,19 +1,74 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comment Classification</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hate Speech Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+    h1 {
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
 </head>
 <body>
-    <h1>Enter a comment to classify</h1>
-    <form method="POST">
-        <textarea name="comment" rows="4" cols="50"></textarea><br><br>
-        <input type="submit" value="Classify">
-    </form>
-    {% if classification %}
-        <h2>Classification: {{ classification }}</h2>
-    {% endif %}
+
+  <div class="container">
+    <h1>Hate Speech Detection</h1>
+    <label for="comment">Enter your comment:</label>
+    <input type="text" id="comment" placeholder="Type your comment here">
+    <button onclick="classifyComment()">Classify Comment</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function classifyComment() {
+      const comment = document.getElementById('comment').value;
+      
+      fetch('/classify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ comment }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('result').textContent = `Classification: ${data.classification}`;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+  
 </body>
 </html>
